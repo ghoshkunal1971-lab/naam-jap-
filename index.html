@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Designed by Kunal</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <p class="credit">Created by Kunal Ghosh</p>
+      <section class="jap-panel" aria-labelledby="page-title">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">RADHE RADHE</p>
+            <h1 id="page-title">Chant with a calm mind</h1>
+          </div>
+          <button class="icon-button" id="soundToggle" type="button" aria-label="Sound on">Sound</button>
+        </div>
+
+        <div class="settings-row">
+          <label>
+            Active name
+            <select id="nameSelect"></select>
+          </label>
+          <label>
+            Add custom name
+            <input id="newNameInput" type="text" placeholder="Krishna, Shiva, Radha...">
+          </label>
+          <button class="secondary-button wide-action" id="addNameButton" type="button">Add</button>
+        </div>
+
+        <label class="field-label" for="mantraInput">Name to chant</label>
+        <input id="mantraInput" class="mantra-input" type="text" value="Ram" autocomplete="off">
+
+        <div class="counter-stage" aria-live="polite">
+          <div class="mala-ring" id="malaRing">
+            <span class="mala-count" id="countDisplay">0</span>
+            <span class="mala-label">chants</span>
+          </div>
+          <p class="mantra-preview" id="mantraPreview">Ram</p>
+        </div>
+
+        <div class="progress-wrap" aria-label="Mala progress">
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="roundDisplay">Round 1</span>
+            <span><span id="remainingDisplay">108</span> left</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="primary-button" id="japButton" type="button">
+            <span aria-hidden="true">+</span>
+            Add chant
+          </button>
+          <button class="secondary-button" id="minusButton" type="button" aria-label="Remove one chant">-</button>
+          <button class="secondary-button" id="resetButton" type="button" aria-label="Reset current counter">Reset</button>
+        </div>
+
+        <div class="settings-row">
+          <label>
+            Mala target
+            <input id="targetInput" type="number" min="1" max="1008" value="108">
+          </label>
+          <label>
+            Daily goal
+            <input id="dailyGoalInput" type="number" min="1" max="1000000" value="108">
+          </label>
+          <label>
+            Theme
+            <select id="themeSelect">
+              <option value="calm">Calm</option>
+              <option value="bright">Bright</option>
+              <option value="night">Night</option>
+            </select>
+          </label>
+        </div>
+
+        <p class="hint">Press Space or Enter to add a chant.</p>
+
+        <section class="records-section" aria-labelledby="goal-title">
+          <div class="section-heading">
+            <h2 id="goal-title">Today</h2>
+            <span id="dailyGoalText">0 / 108</span>
+          </div>
+          <div class="progress-track goal-track">
+            <div class="progress-fill" id="dailyGoalFill"></div>
+          </div>
+          <div class="stat-grid stat-grid-four">
+            <div>
+              <span class="stat-value" id="streakTotal">0</span>
+              <span class="stat-label">Day streak</span>
+            </div>
+            <div>
+              <span class="stat-value" id="sessionTime">00:00</span>
+              <span class="stat-label">Session time</span>
+            </div>
+            <div>
+              <span class="stat-value" id="chantSpeed">0</span>
+              <span class="stat-label">Chants/min</span>
+            </div>
+            <div>
+              <span class="stat-value" id="levelName">Beginner</span>
+              <span class="stat-label">Level</span>
+            </div>
+          </div>
+          <div class="controls compact-controls">
+            <button class="secondary-button wide-action" id="sessionToggle" type="button">Pause timer</button>
+            <button class="secondary-button wide-action" id="exportButton" type="button">Export data</button>
+            <button class="secondary-button wide-action" id="csvButton" type="button">Export CSV</button>
+            <label class="file-action">
+              Import data
+              <input id="importInput" type="file" accept="application/json">
+            </label>
+          </div>
+        </section>
+
+        <section class="records-section" aria-labelledby="mala-title">
+          <div class="section-heading">
+            <h2 id="mala-title">Mala Beads</h2>
+            <span id="beadText">0 / 108</span>
+          </div>
+          <div class="bead-grid" id="beadGrid" aria-label="108 bead progress"></div>
+        </section>
+
+        <section class="records-section" aria-labelledby="calendar-title">
+          <div class="section-heading">
+            <h2 id="calendar-title">Calendar</h2>
+            <span id="calendarMonth">This month</span>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </section>
+
+        <section class="records-section" aria-labelledby="notes-title">
+          <div class="section-heading">
+            <h2 id="notes-title">Daily Note</h2>
+            <span id="quoteText">Keep going.</span>
+          </div>
+          <textarea id="noteInput" class="note-input" rows="3" placeholder="Write today's sankalp or reflection..."></textarea>
+        </section>
+
+        <section class="records-section" aria-labelledby="records-title">
+          <div class="section-heading">
+            <h2 id="records-title">Daily Record</h2>
+            <span id="todayTotal">Today: 0</span>
+          </div>
+          <div class="stat-grid">
+            <div>
+              <span class="stat-value" id="lifetimeTotal">0</span>
+              <span class="stat-label">Lifetime chants</span>
+            </div>
+            <div>
+              <span class="stat-value" id="bestDayTotal">0</span>
+              <span class="stat-label">Best day</span>
+            </div>
+          </div>
+          <div class="record-list" id="recordList"></div>
+        </section>
+
+        <section class="records-section" aria-labelledby="names-title">
+          <div class="section-heading">
+            <h2 id="names-title">Name Totals</h2>
+            <span id="activeNameTotal">Ram: 0</span>
+          </div>
+          <div class="record-list" id="nameTotalsList"></div>
+        </section>
+
+        <section class="records-section" aria-labelledby="reminder-title">
+          <div class="section-heading">
+            <h2 id="reminder-title">Reminder & Sound</h2>
+            <span id="reminderStatus">Reminder off</span>
+          </div>
+          <div class="settings-row">
+            <label>
+              Reminder time
+              <input id="reminderTimeInput" type="time">
+            </label>
+            <label>
+              Bell volume
+              <input id="volumeInput" type="range" min="0" max="100" value="70">
+            </label>
+            <label class="checkbox-label">
+              <input id="ambientToggle" type="checkbox">
+              Soft background hum
+            </label>
+          </div>
+          <button class="secondary-button wide-action" id="reminderToggle" type="button">Enable reminder</button>
+        </section>
+
+        <section class="records-section" aria-labelledby="achievements-title">
+          <div class="section-heading">
+            <h2 id="achievements-title">Achievements</h2>
+            <span id="nextAchievement">Next: 100</span>
+          </div>
+          <div class="achievement-list" id="achievementList"></div>
+        </section>
+      </section>
+
+      <div class="toast" id="achievementToast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
