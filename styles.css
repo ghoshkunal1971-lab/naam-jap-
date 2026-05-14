@@ -317,6 +317,50 @@ button:focus-visible {
   text-align: center;
 }
 
+.auth-section {
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.auth-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto auto auto;
+  align-items: end;
+  gap: 10px;
+}
+
+.auth-grid label {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.auth-grid input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.auth-help {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+button:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
 .records-section {
   margin-top: 20px;
   padding-top: 18px;
@@ -607,6 +651,10 @@ body[data-theme="night"] {
   .settings-row {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .auth-grid {
+    grid-template-columns: 1fr;
   }
 
   .stat-grid,

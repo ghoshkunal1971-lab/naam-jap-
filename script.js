@@ -1,3 +1,5 @@
+import { cloudAuth } from "./auth.js";
+
 const STORAGE_KEY = "name-chant-state";
 const LEGACY_STORAGE_KEY = "naam-jap-state";
 
@@ -49,6 +51,13 @@ const elements = {
   volumeInput: document.querySelector("#volumeInput"),
   ambientToggle: document.querySelector("#ambientToggle"),
   achievementToast: document.querySelector("#achievementToast"),
+  authEmail: document.querySelector("#authEmail"),
+  authPassword: document.querySelector("#authPassword"),
+  signInButton: document.querySelector("#signInButton"),
+  signUpButton: document.querySelector("#signUpButton"),
+  signOutButton: document.querySelector("#signOutButton"),
+  authStatus: document.querySelector("#authStatus"),
+  authHelp: document.querySelector("#authHelp"),
 };
 
 let state = {
@@ -119,8 +128,27 @@ let toastTimer;
 let ambientContext;
 let ambientOscillator;
 let ambientGain;
+let cloudSyncReady = false;
+let cloudSaveTimer;
 
-const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+const save = () => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  queueCloudSave();
+};
+
+const queueCloudSave = () => {
+  if (!cloudSyncReady || !cloudAuth.user()) return;
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(async () => {
+    try {
+      await cloudAuth.saveState(state);
+      elements.authStatus.textContent = `Synced: ${cloudAuth.user().email}`;
+    } catch (error) {
+      elements.authStatus.textContent = "Sync failed";
+      elements.authHelp.textContent = error.message || "Cloud sync failed.";
+    }
+  }, 700);
+};
 
 const todayKey = () => {
   const now = new Date();
@@ -180,6 +208,58 @@ const ensureStateShape = () => {
   if (!state.totalChants && state.count > 0) state.totalChants = state.count;
   if (!state.nameTotals[state.activeName]) state.nameTotals[state.activeName] = 0;
   state.mantra = state.activeName;
+};
+
+const applyCloudState = (cloudState) => {
+  if (!cloudState || typeof cloudState !== "object") return;
+  state = { ...state, ...cloudState };
+  ensureStateShape();
+  state.session = freshSession();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  render();
+};
+
+const setAuthUi = (user) => {
+  const signedIn = Boolean(user);
+  elements.authEmail.parentElement.hidden = signedIn;
+  elements.authPassword.parentElement.hidden = signedIn;
+  elements.signInButton.hidden = signedIn;
+  elements.signUpButton.hidden = signedIn;
+  elements.signOutButton.hidden = !signedIn;
+  elements.authStatus.textContent = signedIn ? `Signed in: ${user.email}` : "Not signed in";
+  elements.authHelp.textContent = signedIn
+    ? "Your records sync to your account."
+    : "Sign in to keep records across devices.";
+};
+
+const setupAuth = async () => {
+  const result = await cloudAuth.init(async (user) => {
+    cloudSyncReady = Boolean(user);
+    setAuthUi(user);
+
+    if (!user) return;
+
+    try {
+      const cloudState = await cloudAuth.loadState();
+      if (cloudState) {
+        applyCloudState(cloudState);
+        showToast("Account records loaded");
+      } else {
+        await cloudAuth.saveState(state);
+        showToast("Local records saved to account");
+      }
+    } catch (error) {
+      elements.authStatus.textContent = "Cloud load failed";
+      elements.authHelp.textContent = error.message || "Could not load account records.";
+    }
+  });
+
+  if (!result.enabled) {
+    elements.authStatus.textContent = "Local mode";
+    elements.authHelp.textContent = result.message;
+    elements.signInButton.disabled = true;
+    elements.signUpButton.disabled = true;
+  }
 };
 
 const load = () => {
@@ -646,6 +726,37 @@ elements.reminderToggle.addEventListener("click", async () => {
   save();
 });
 
+elements.signInButton.addEventListener("click", async () => {
+  try {
+    elements.authStatus.textContent = "Signing in...";
+    await cloudAuth.signIn(elements.authEmail.value.trim(), elements.authPassword.value);
+  } catch (error) {
+    elements.authStatus.textContent = "Sign in failed";
+    elements.authHelp.textContent = error.message || "Could not sign in.";
+  }
+});
+
+elements.signUpButton.addEventListener("click", async () => {
+  try {
+    elements.authStatus.textContent = "Creating account...";
+    await cloudAuth.signUp(elements.authEmail.value.trim(), elements.authPassword.value);
+  } catch (error) {
+    elements.authStatus.textContent = "Sign up failed";
+    elements.authHelp.textContent = error.message || "Could not create account.";
+  }
+});
+
+elements.signOutButton.addEventListener("click", async () => {
+  try {
+    await cloudAuth.signOut();
+    cloudSyncReady = false;
+    showToast("Signed out");
+  } catch (error) {
+    elements.authStatus.textContent = "Sign out failed";
+    elements.authHelp.textContent = error.message || "Could not sign out.";
+  }
+});
+
 document.addEventListener("keydown", (event) => {
   const isTyping = ["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName);
   if (isTyping) return;
@@ -658,6 +769,7 @@ document.addEventListener("keydown", (event) => {
 
 load();
 render();
+setupAuth();
 setInterval(() => {
   if (state.session.running) render();
   checkReminder();

@@ -18,6 +18,27 @@
           <button class="icon-button" id="soundToggle" type="button" aria-label="Sound on">Sound</button>
         </div>
 
+        <section class="auth-section" aria-labelledby="auth-title">
+          <div class="section-heading">
+            <h2 id="auth-title">Account</h2>
+            <span id="authStatus">Local mode</span>
+          </div>
+          <div class="auth-grid">
+            <label>
+              Email
+              <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com">
+            </label>
+            <label>
+              Password
+              <input id="authPassword" type="password" autocomplete="current-password" placeholder="Minimum 6 characters">
+            </label>
+            <button class="secondary-button wide-action" id="signInButton" type="button">Sign in</button>
+            <button class="secondary-button wide-action" id="signUpButton" type="button">Sign up</button>
+            <button class="secondary-button wide-action" id="signOutButton" type="button" hidden>Sign out</button>
+          </div>
+          <p class="auth-help" id="authHelp">Add Firebase config to save records with user accounts.</p>
+        </section>
+
         <div class="settings-row">
           <label>
             Active name
@@ -202,6 +223,6 @@
       <div class="toast" id="achievementToast" role="status" aria-live="polite"></div>
     </main>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
