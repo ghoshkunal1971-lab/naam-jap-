@@ -609,6 +609,47 @@ button:disabled {
   transform: translate(-50%, 0);
 }
 
+.site-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 16px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.site-links a,
+.static-page a {
+  color: var(--leaf);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.site-links a:hover,
+.static-page a:hover {
+  text-decoration: underline;
+}
+
+.static-shell {
+  align-items: center;
+}
+
+.static-page {
+  width: min(760px, 100%);
+  text-align: left;
+}
+
+.static-page h1 {
+  text-align: center;
+}
+
+.static-page p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
 body[data-theme="bright"] {
   --panel: rgba(255, 253, 244, 0.94);
   --accent: #d15c38;

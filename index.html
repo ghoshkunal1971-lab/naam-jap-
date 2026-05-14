@@ -3,8 +3,29 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Designed by Kunal</title>
+    <meta name="description" content="Naam Jap is a free online chant counter with daily records, achievements, streaks, mala progress, and account sync.">
+    <meta name="keywords" content="naam jap, nam jap, online chant counter, mantra counter, mala counter, jap counter">
+    <meta name="author" content="Kunal Ghosh">
+    <meta property="og:title" content="Naam Jap - Online Chant Counter">
+    <meta property="og:description" content="Track your daily chants, streaks, achievements, and lifetime naam jap progress.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <title>Naam Jap - Online Chant Counter</title>
     <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Naam Jap",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Any",
+        "description": "A free online chant counter for naam jap with daily records, achievements, streaks, and account sync.",
+        "creator": {
+          "@type": "Person",
+          "name": "Kunal Ghosh"
+        }
+      }
+    </script>
   </head>
   <body>
     <main class="app-shell">
@@ -218,6 +239,13 @@
           </div>
           <div class="achievement-list" id="achievementList"></div>
         </section>
+
+        <nav class="site-links" aria-label="Site links">
+          <a href="about.html">About</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="contact.html">Contact</a>
+          <a href="terms.html">Terms</a>
+        </nav>
       </section>
 
       <div class="toast" id="achievementToast" role="status" aria-live="polite"></div>
